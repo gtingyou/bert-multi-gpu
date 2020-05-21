@@ -1,0 +1,15 @@
+python run_classifier.py \
+  --do_lower_case=true \
+  --do_train=false \
+  --do_eval=false \
+  --do_predict=true \
+  --save_for_serving=true \
+  --vocab_file=models/bert_pretrained/chinese_L-12_H-768_A-12/vocab.txt \
+  --bert_config_file=models/bert_pretrained/chinese_L-12_H-768_A-12/bert_config.json \
+  --max_seq_length=512 \
+  --use_gpu=true \
+  --num_gpu_cores=8 \
+  --task_name=classification_3 \
+  --data_dir=data/classification/news_related_1541 \
+  --init_checkpoint=models/classification/news_related_1541_E-1 \
+  --output_dir=test_output/news_related_1541_E-1
