@@ -24,7 +24,6 @@ tensorflow-gpu >= 1.11.0 # GPU version of TensorFlow.
 https://github.com/ymcui/Chinese-BERT-wwm
 - BERT-wwm, Chinese
 - BERT-base, Chinese (12-layer, 768-hidden, 12-heads, 110M parameters)
-
 以TensorFlow版`BERT-wwm, Chinese`为例，下载完毕后对zip文件进行解压得到：
 ```
 chinese_wwm_L-12_H-768_A-12.zip
