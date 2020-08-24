@@ -1,19 +1,19 @@
 python run_classifier.py \
-  --task_name=classification_3 \
   --do_lower_case=true \
   --do_train=true \
   --do_eval=true \
   --do_predict=false \
   --save_for_serving=true \
-  --data_dir=./data/classification/news_related_1541 \
-  --vocab_file=./models/bert_pretrained/chinese_wwm_L-12_H-768_A-12/vocab.txt \
-  --bert_config_file=./models/bert_pretrained/chinese_wwm_L-12_H-768_A-12/bert_config.json \
-  --init_checkpoint=./models/bert_pretrained/chinese_L-12_H-768_A-12/bert_model.ckpt \
   --max_seq_length=512 \
-  --train_batch_size=16 \
+  --train_batch_size=32 \
   --learning_rate=2e-5 \
   --num_train_epochs=10 \
   --use_gpu=true \
   --num_gpu_cores=8 \
   --use_fp16=true \
-  --output_dir=./models/classification/news_related_1541_wwm_E-10
+  --task_name=classification_2 \
+  --data_dir=/home/u4839782/bert-multi-gpu/data/news_paragraph_classification_2/ \
+  --output_dir=/home/u4839782/bert-multi-gpu/models/news_paragraph_classification_2/ \
+  --vocab_file=/home/u4839782/bert-multi-gpu/models/bert_pretrained/chinese_wwm_L-12_H-768_A-12/vocab.txt \
+  --bert_config_file=/home/u4839782/bert-multi-gpu/models/bert_pretrained/chinese_wwm_L-12_H-768_A-12/bert_config.json \
+  --init_checkpoint=/home/u4839782/bert-multi-gpu/models/bert_pretrained/chinese_wwm_L-12_H-768_A-12/bert_model.ckpt

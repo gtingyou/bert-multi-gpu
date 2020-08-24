@@ -222,7 +222,7 @@ class DataProcessor(object):
                 lines.append(line)
             return lines
 
-class SentimentProcessor(DataProcessor):
+class Sentiment_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
         file_path = os.path.join(data_dir, 'train.csv')
         train_df = pd.read_csv(file_path, encoding='utf-8')
@@ -266,7 +266,56 @@ class SentimentProcessor(DataProcessor):
 
     def get_labels(self):
         return ['0', '1']
-        
+
+    
+class Classificaiton_2_Processor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'train.csv')
+        train_df = pd.read_csv(file_path, encoding='utf-8')
+        train_data = []
+        for index, train in enumerate(train_df.values):
+            guid = 'train-%d' % index
+            text_a = tokenization.convert_to_unicode(str(train[0]))
+            text_b = tokenization.convert_to_unicode(str(train[1]))
+            label = str(train[2])
+            train_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return train_data
+
+    def get_dev_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'dev.csv')
+        dev_df = pd.read_csv(file_path, encoding='utf-8')
+        dev_data = []
+        for index, dev in enumerate(dev_df.values):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(dev[0]))
+            text_b = tokenization.convert_to_unicode(str(dev[1]))
+            label = str(dev[2])
+            dev_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return dev_data
+
+    def get_test_examples(self, data_dir):
+        file_path = os.path.join(data_dir, 'test.csv')
+        test_df = pd.read_csv(file_path, encoding='utf-8')
+        test_data = []
+        for index, test in enumerate(test_df.values):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(test[0]))
+            text_b = tokenization.convert_to_unicode(str(test[1]))
+            label = str(0) #str(test[2]) 
+            test_data.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return test_data
+
+    def get_sentence_examples(self, questions):
+        for index, data in enumerate(questions):
+            guid = 'test-%d' % index
+            text_a = tokenization.convert_to_unicode(str(data[0]))
+            text_b = tokenization.convert_to_unicode(str(data[1]))
+            label = str(0)
+            yield InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label)
+
+    def get_labels(self):
+        return ['0', '1']
+    
         
 class Classificaiton_3_Processor(DataProcessor):
     def get_train_examples(self, data_dir):
@@ -398,7 +447,7 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
     assert len(input_ids) == max_seq_length
     assert len(input_mask) == max_seq_length
     assert len(segment_ids) == max_seq_length
-
+    
     label_id = label_map[example.label]
     if ex_index < 5:
         tf.logging.info("*** Example ***")
@@ -423,12 +472,12 @@ def file_based_convert_examples_to_features(
         examples, label_list, max_seq_length, tokenizer, output_file):
     """Convert a set of `InputExample`s to a TFRecord file."""
 
-    writer = tf.python_io.TFRecordWriter(output_file)
+    writer = tf.io.TFRecordWriter(output_file)
 
     for (ex_index, example) in enumerate(examples):
         if ex_index % 10000 == 0:
             tf.logging.info("Writing example %d of %d" % (ex_index, len(examples)))
-
+            
         feature = convert_single_example(ex_index, example, label_list,
                                          max_seq_length, tokenizer)
 
@@ -766,7 +815,8 @@ def main(_):
 
     processors = {
         "classification_3": Classificaiton_3_Processor,
-        "sentiment": SentimentProcessor,
+        "classification_2": Classificaiton_2_Processor,
+        "sentiment": Sentiment_Processor,
     }
 
     tokenization.validate_case_matches_checkpoint(FLAGS.do_lower_case,
